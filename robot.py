@@ -85,7 +85,6 @@ class Vehicle:
 	def curve_right(self, forwardSpeed, difference):
 		mySpeedRight = int(forwardSpeed - difference*forwardSpeed/100)
 		mySpeedLeft = int(forwardSpeed + difference*forwardSpeed/100)
-		print "curve right"
 		self.set_right_speed(mySpeedRight)
 		self.set_left_speed(mySpeedLeft)
 		self.forward()
@@ -95,7 +94,6 @@ class Vehicle:
 
 		mySpeedRight = int(forwardSpeed + difference*forwardSpeed/100)
 		mySpeedLeft = int(forwardSpeed - difference*forwardSpeed/100)
-		print "curve left"
 		self.set_right_speed(mySpeedRight)
 		self.set_left_speed(mySpeedLeft)
 		self.forward()
@@ -111,12 +109,10 @@ class Vehicle:
 
 	def stop(self):
 		if self.status == 0: return
-		print "Stop"
 		self.sock.send(STOP)
 		self.status = 0
 
 	def go_forward(self, speed):
-		print "moving forward"
 		self.set_left_speed(speed)
 		self.set_right_speed(speed)
 		self.sock.send(FORWARD)
@@ -124,7 +120,6 @@ class Vehicle:
 
 	def forward(self):
 		if self.status == 3 or self.status == 5 or self.status == 6: return
-		print "curving"
 		self.sock.send(FORWARD)
 
 	def backward(self):
@@ -134,25 +129,21 @@ class Vehicle:
 
 	def rotate_left(self):
 		if self.status == 2: return
-		print "rotating left"
 		self.sock.send(ROTL)
 		self.status = 2
 
 	def rotate_right(self):
 		if self.status == 1: return
-		print "rotating right"
 		self.sock.send(ROTR)
 		self.status = 1
 
 	def set_left_speed(self, leftspeed):
 		if self.status != 0 and self.status != 3 and self.status != 5 and self.status != 6: return
-		# print "set left speed = ", leftspeed
 		commandleft = SETLEFT.replace("x", hex(leftspeed).replace("0x", "").zfill(2))
 		self.sock.send(bytearray.fromhex(commandleft))
 
 	def set_right_speed(self, rightspeed):
 		if self.status != 0 and self.status != 3 and self.status != 5 and self.status != 5: return
-		# print "set right speed = ", rightspeed
 		rightspeed = hex(int(rightspeed))
 		rightspeed = rightspeed.replace("0x","")
 		rightspeed = rightspeed.zfill(2)
